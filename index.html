@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Be My Valentine?</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+body{
+    margin:0;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-family:'Quicksand',sans-serif;
+    background:linear-gradient(-45deg,#ff9a9e,#fad0c4,#ffc3a0,#ffafbd);
+    background-size:400% 400%;
+    animation:bg 10s ease infinite;
+    overflow:hidden;
+}
+
+@keyframes bg{
+    0%{background-position:0% 50%;}
+    50%{background-position:100% 50%;}
+    100%{background-position:0% 50%;}
+}
+
+.container{
+    width: 550px; 
+    padding: 60px 40px;
+    border-radius: 30px;
+    background:rgba(255,255,255,0.4); 
+    backdrop-filter:blur(20px);
+    text-align:center;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    position: relative;
+    transition: all 0.5s ease;
+}
+
+/* SHAKE ANIMATION for Mad Mode */
+@keyframes shake {
+  0% { transform: translate(1px, 1px) rotate(0deg); }
+  10% { transform: translate(-1px, -2px) rotate(-1deg); }
+  20% { transform: translate(-3px, 0px) rotate(1deg); }
+  30% { transform: translate(3px, 2px) rotate(0deg); }
+  40% { transform: translate(1px, -1px) rotate(1deg); }
+  50% { transform: translate(-1px, 2px) rotate(-1deg); }
+  60% { transform: translate(-3px, 1px) rotate(0deg); }
+  70% { transform: translate(3px, 1px) rotate(-1deg); }
+  80% { transform: translate(-1px, -1px) rotate(1deg); }
+  90% { transform: translate(1px, 2px) rotate(0deg); }
+  100% { transform: translate(1px, -2px) rotate(-1deg); }
+}
+
+.shake {
+    animation: shake 0.5s;
+    animation-iteration-count: infinite;
+}
+
+/* New Video/GIF Loop Container */
+.video-loop-container {
+    width: 100%;
+    height: 220px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.gif-loop {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 15px;
+    filter: drop-shadow(0 5px 15px rgba(255, 46, 99, 0.2));
+    object-fit: contain;
+}
+
+h1{
+    font-family:'Pacifico',cursive;
+    color:#ff2e63;
+    font-size: 2.8rem;
+    margin: 10px 0 20px 0;
+    text-shadow: 2px 2px 4px rgba(255,255,255,0.5);
+}
+
+.message{
+    display:none;
+    font-family:'Pacifico';
+    color:#ff2e63;
+    font-size:1.8rem;
+    margin-bottom: 25px;
+    min-height: 40px;
+}
+
+/* BUTTON AREA */
+.button-area{
+    display:flex;
+    justify-content:center;
+    gap:40px;
+    transition:0.3s ease;
+    margin-top: 20px;
+}
+
+button{
+    width:180px; 
+    height:65px; 
+    border:none;
+    border-radius:999px;
+    font-weight:700;
+    font-size: 1.2rem;
+    cursor:pointer;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+
+button:active {
+    transform: scale(0.95);
+}
+
+#yesBtn{
+    background:linear-gradient(135deg,#2dd417,#16bd07);
+    color:white;
+}
+
+#noBtn{
+    background:rgb(231, 84, 84);
+    color:#fdf4f6;
+}
+
+/* Pulse animation */
+@keyframes pulse{
+    0%{transform:scale(1);}
+    30%{transform:scale(1.05);}
+    60%{transform:scale(0.98);}
+    100%{transform:scale(1);}
+}
+
+.pulse{
+    animation:pulse 0.6s ease;
+}
+
+/* Button swap animation */
+.flip{
+    animation:swapAnim 0.3s ease;
+}
+
+@keyframes swapAnim{
+    0%{transform:scale(0.95);}
+    50%{transform:scale(1.05);}
+    100%{transform:scale(1);}
+}
+
+/* HEART SCREEN */
+.heart-screen{
+    position:absolute;
+    top: 0;
+    left: 0;
+    width:100%;
+    height:100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    z-index: 100;
+}
+
+.success-video {
+    width: 300px;
+    height: auto;
+    margin-bottom: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(255, 46, 99, 0.3);
+    animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popIn {
+    0% { transform: scale(0); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.heart-text{
+    position:relative;
+    text-align:center;
+    color:#ffffff;
+    font-family:'Pacifico';
+    font-size: 38px;
+    text-shadow: 0 4px 10px rgba(255, 46, 99, 0.5);
+    z-index: 2;
+}
+
+/* Floating hearts */
+.small-heart{
+    position:absolute;
+    width:30px;
+    animation:float 6s linear infinite;
+    opacity:0;
+    z-index: 1;
+}
+
+@keyframes float{
+    0%{transform:translateY(50px) rotate(0deg);opacity:0;}
+    20%{opacity:1;}
+    100%{transform:translateY(-800px) rotate(360deg);opacity:0;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container" id="card">
+    <div class="video-loop-container">
+        <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExd255c3ZsdmNrNGZ4MHVmN2RoNzJzd2N1YWIxczc4ZTg3M2NpY2ZrYSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/Zl7u48zLVFgLpRwq6f/giphy.gif" 
+             alt="Cute Bear" 
+             class="gif-loop" 
+             id="mainGif"
+             onerror="this.src='https://media.giphy.com/media/26FLdmIp6wJr91JAI/giphy.gif'"> 
+    </div>
+
+    <h1>Will you be my Valentine? 🌹</h1>
+    
+    <div id="msg" class="message"></div>
+
+    <div class="button-area" id="buttonArea">
+        <button id="yesBtn">Yes ❤️</button>
+        <button id="noBtn">No 🥺</button>
+    </div>
+</div>
+
+<script>
+const yesBtn=document.getElementById("yesBtn");
+const noBtn=document.getElementById("noBtn");
+const card=document.getElementById("card");
+const msg=document.getElementById("msg");
+const buttonArea=document.getElementById("buttonArea");
+const mainGif=document.getElementById("mainGif");
+
+let clickCount=0;
+let audioCtx;
+
+// Preload success gif (Giphy)
+const successGifUrl = "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExY3l6dXRvNjl4NXd5bXk4bDI5MngyamswOHZ2azAyMTFpcmw5bXdncSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/ytu2GUYbvhz7zShGwS/giphy.gif"; 
+const preloadImg = new Image();
+preloadImg.src = successGifUrl;
+
+/* REAL DOUBLE HEARTBEAT */
+function playHeartbeat(){
+    if(!audioCtx){
+        audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+    }
+
+    if(audioCtx.state === 'suspended') {
+        audioCtx.resume();
+    }
+
+    const now=audioCtx.currentTime;
+
+    function beat(time,freq,gainAmount){
+        const osc=audioCtx.createOscillator();
+        const gain=audioCtx.createGain();
+        const filter=audioCtx.createBiquadFilter();
+
+        osc.type="triangle";
+        osc.frequency.value=freq;
+
+        filter.type="lowpass";
+        filter.frequency.value=150;
+
+        gain.gain.setValueAtTime(gainAmount,time);
+        gain.gain.exponentialRampToValueAtTime(0.001,time+0.25);
+
+        osc.connect(filter);
+        filter.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc.start(time);
+        osc.stop(time+0.25);
+    }
+
+    beat(now,55,1.0);
+    beat(now+0.18,65,0.7);
+}
+
+/* NO CLICK */
+noBtn.addEventListener("click",()=>{
+    clickCount++;
+    
+    // Change GIF to Sad on first No
+    if(clickCount === 1) {
+     mainGif.src =  "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExd255c3ZsdmNrNGZ4MHVmN2RoNzJzd2N1YWIxczc4ZTg3M2NpY2ZrYSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/pY8jLmZw0ElqvVeRH4/giphy.gif"; 
+    }
+
+    if(Math.random()<0.7){
+        buttonArea.classList.remove("flip");
+        void buttonArea.offsetWidth;
+        buttonArea.classList.add("flip");
+
+        if(buttonArea.firstElementChild.id==="yesBtn"){
+            buttonArea.appendChild(yesBtn);
+        }else{
+            buttonArea.appendChild(noBtn);
+        }
+    }
+
+    card.classList.remove("pulse");
+    void card.offsetWidth;
+    card.classList.add("pulse");
+
+    playHeartbeat();
+
+    msg.style.display="block";
+
+    // --- LOGIC HANDLER ---
+    
+    // 0. FINAL BOSS STATE (Click 20 - End Game)
+    if (clickCount === 20) {
+        noBtn.style.display = "none";
+        mainGif.src = "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNXRxd21kaWZmN2ZlcHVjZ2gwdjc3bWgzeXY4NWE4YzQ5d3g0enhndSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/901mxGLGQN2PyCQpoc/giphy.gif"; // Funny waiting gif
+        
+        msg.textContent = "FINAL WARNING \nNOW JUST CLICK ON YES" ;
+        msg.style.fontSize = "2.5rem";
+        msg.style.fontWeight = "900";
+        
+        card.classList.remove("shake");
+        document.body.style.background = "linear-gradient(-45deg, #000000, #434343)"; 
+    }
+    // 1. ANGRY MODE (Trigger at click 11-19)
+    else if (clickCount >= 11) {
+        document.body.style.background = "linear-gradient(-45deg, #D90429, #EF233C)"; 
+        document.body.style.animation = "none"; 
+        card.classList.add("shake"); 
+        
+        const angryGifs = [
+            "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3bDJsNmNsYWIzZTEzY2szOWF4Z2txenVjZHgxY3UyMjRqbGszZmxiYiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/zQR7qMJ3Esh0Y/giphy.gif", // Table flip
+            "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3bDJsNmNsYWIzZTEzY2szOWF4Z2txenVjZHgxY3UyMjRqbGszZmxiYiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/xkkZUQzX9lbBxhF3Lo/giphy.gif", // Anger
+            "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3dm53cmR0NnFoOW1uMHpma3Zid2ttOHI2M3RyampmaHRpaWlqaHlyNSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/mlvseq9yvZhba/giphy.gif", // Panda mad
+            "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbW5rdG9jdnFiMmJnaXRsYmpsbGg3N2F2d2V3OGhsZnJ3anQyNHJwbiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/lD2qFeJzjtG52UDtCm/giphy.gif",
+            "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3YTR2a2ppdjh1Y2Z6NG44eWlkbzE2c2xta3RjMHAwZmNoaTVyZnhjcSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/IsEUT6DP5FrIuMP7d5/giphy.gif",
+            "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3dmR0ZmY1aW1qbnZjcWtlMzNlNTJnMWJ3cHpjZm0xMTZhbWw2ZGpkcyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/LWveaUTd8a9Bw7MdYO/giphy.gif",
+            "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdTluejZ1eG9vZGZ4MWN1cnZ2cnF1bzR4b3QzcnVtOHozMHBuaHRhdCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/VMzPlisDx2hBjFAAZQ/giphy.gif",
+            "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3cm1icDFqdnkycDlwbndjZDVyZDJ4dHBuODMwNjVlNTR0NzZhaTZ2MSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/AoNkMC3v6MzBM360jB/giphy.gif",
+            "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNjBjbnZya2xyeWNjbzkyY3F3Mzd3azNsYThvMms0ZDEyam5nYWZxbCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/95aDE8iaJxPUmxifSa/giphy.gif",
+        ];
+        
+        mainGif.src = angryGifs[(clickCount - 11) % angryGifs.length];
+
+        const angryTexts = [
+            "OKAY I'M ACTUALLY MAD NOW! 😡",
+            "STOP CLICKING NO! 💢",
+            "I AM FUMING! 😤",
+            "YOU ARE MAKING ME SAD-ANGRY! 😭😠",
+            "JUST CLICK YES!! 🔥",
+            "MY LAWYER WILL HEAR ABOUT THIS! ⚖️",
+            "I AM CALLING THE POLICE! 👮‍♂️",
+            "ERROR 404: PATIENCE NOT FOUND 💻",
+            "THIS IS HARASSMENT! 🚫"
+        ];
+        msg.textContent = angryTexts[(clickCount - 11) % angryTexts.length];
+        
+        msg.style.color = "#000000"; 
+        msg.style.fontWeight = "normal";
+        msg.style.fontSize = "1.8rem";
+msg.style.fontFamily = "'Rubik Glitch', cursive"
+    } 
+    // 2. SHOCKED STATE (Click 10)
+    else if (clickCount === 10) {
+        document.body.style.background = "linear-gradient(-45deg,#ff9a9e,#fad0c4,#ffc3a0,#ffafbd)";
+        document.body.style.animation = "bg 10s ease infinite";
+        card.classList.remove("shake");
+
+        // SHOCKED MEDIA
+        mainGif.src = "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3bWdvYmpnNzkyZTQ5bDVlaDd6eml2NnpqZTBsMnNsODcxanh1Z3c3OSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/CbaZ2Tl08Hs9As7HGT/giphy.gif";
+
+        msg.textContent = "Did you actually just say no again?! 😱";
+        msg.style.color = "#ff2e63";
+        msg.style.fontWeight = "bold";
+        msg.style.fontSize = "1.8rem";
+    }
+    // 3. NORMAL MODE (Clicks 1-9)
+    else {
+        document.body.style.background = "linear-gradient(-45deg,#ff9a9e,#fad0c4,#ffc3a0,#ffafbd)";
+        document.body.style.animation = "bg 10s ease infinite";
+        card.classList.remove("shake");
+
+        const texts = [
+            "Come on babe 😘",                    // Click 1 text (Image handled at top)
+            "You can't win queen 👑",             // Click 2
+            "Come on my love 💕",                 // Click 3
+            "Please Baby 💖",            // Click 4
+            "Already hijacked your fingers 💖",   // Click 5
+            "You can't escape baby 😈",           // Click 6
+            "This will be us!",                         // Click 7
+            "I'll buy you chocolate! 🍫",         // Click 8
+            "Just click Yes already! ❤️"          // Click 9
+        ];
+        
+        msg.textContent = texts[(clickCount - 1) % texts.length];
+        msg.style.color = "#ff2e63"; 
+        msg.style.fontWeight = "normal";
+        msg.style.fontSize = "1.8rem";
+
+        // --- NEW: Custom Media for Clicks 2-9 ---
+        if (clickCount > 1) {
+            const sadImages = [
+                "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3dm53cmR0NnFoOW1uMHpma3Zid2ttOHI2M3RyampmaHRpaWlqaHlyNSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/OHRF8LZis06OiPDJby/giphy.gif", // 2. Pleading Cat
+                "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExd255c3ZsdmNrNGZ4MHVmN2RoNzJzd2N1YWIxczc4ZTg3M2NpY2ZrYSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/G6TgcESZt8FFk8XV7K/giphy.gif", // 3. Crying Cartoon
+                "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3dzBpd3l4Nmt5ODFoMjdvaG9xZWY3M3BjN3V5cjVucjF4b3YxcG0xMiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/9uwnYUDw342pq/giphy.gif", // 4. Begging Dog
+                "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExd255c3ZsdmNrNGZ4MHVmN2RoNzJzd2N1YWIxczc4ZTg3M2NpY2ZrYSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/LBb735fuQwRKAVzN23/giphy.gif", // 5. Sad Stitch
+                "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExd255c3ZsdmNrNGZ4MHVmN2RoNzJzd2N1YWIxczc4ZTg3M2NpY2ZrYSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/YLPOIP1jPu1N87yemm/giphy.gif", // 6. Waiting/Bored
+                "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3YTVndHcxeWJleDVucGx2eG10d2QyeDJtMXJjeHhlMXZjMXFpdjZrNCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/MpeWJ9JyTyOm4/giphy.gif", // 7. Side Eye/Sassy
+                "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3ZHpqdjI1bXRxdnBjY2JocWpvOGM1bW1rZzZma3oybnE2NTZ5aWtxeCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/wKu8FT3lTayN2MbU07/giphy.gif", // 8. Annoyed Cat
+                "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3OGNpeWV5cTdnYzhlb2h6Z291bmZ5M2JlZzZ1djFwYnZnbmlvdnNnaiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/L1FJH5qxESFwpuTgIB/giphy.gif"  // 9. Fed up
+            ];
+
+            // Math: clickCount 2 = index 0
+            const index = clickCount - 2;
+            if (index < sadImages.length) {
+                mainGif.src = sadImages[index];
+            }
+        }
+    }
+});
+
+/* YES CLICK */
+yesBtn.addEventListener("click",()=>{
+    
+    if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+    if(audioCtx.state === 'suspended') audioCtx.resume();
+
+    card.style.display="none";
+
+    const screen=document.createElement("div");
+    screen.className="heart-screen";
+
+    screen.innerHTML=`
+        <img src="${successGifUrl}" class="success-video" alt="Love Bear">
+        <div class="heart-text">Yay! Thank You 💕<br>Love you too 😘</div>
+    `;
+
+    document.body.appendChild(screen);
+
+    for(let i=0;i<30;i++){
+        const small=document.createElementNS("http://www.w3.org/2000/svg","svg");
+        small.setAttribute("viewBox","0 0 512 512");
+        small.classList.add("small-heart");
+        small.style.left=Math.random()*window.innerWidth+"px";
+        small.style.bottom="0px";
+        small.style.animationDelay=Math.random()*6+"s";
+
+        const color = Math.random() > 0.5 ? "#ff2e63" : "#ffffff";
+
+        small.innerHTML=`<path fill="${color}"
+        d="M256 464l-16-14C118 337 48 272 48 192
+        48 122 102 80 160 80c34 0 68 20 96 52
+        28-32 62-52 96-52 58 0 112 42 112 112
+        0 80-70 145-192 258l-16 14z"/>`;
+
+        document.body.appendChild(small);
+    }
+});
+</script>
+
+</body>
+</html>
